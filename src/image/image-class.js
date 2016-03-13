@@ -7,7 +7,7 @@ export default class ImageClass extends RenderInterface {
     constructor(image) {
         super();
         this.setImage(image);
-        this.fx = null;
+        this.animation = null;
     }
 
     setImage(img) {
@@ -27,8 +27,8 @@ export default class ImageClass extends RenderInterface {
         throw new Error('Invalid argument');
     }
 
-    setFX (fx) {
-        this.fx = fx;
+    setAnimation (animation) {
+        this.animation = animation;
     }
 
     /**
@@ -39,8 +39,8 @@ export default class ImageClass extends RenderInterface {
         if (!this.image) {
             return;
         }
-        if (this.fx) {
-            if (this.fx.render(context, delta)) {
+        if (this.animation) {
+            if (this.animation.render(context, delta)) {
                 context.drawImage(this.image, 0, 0);
             }
         } else {

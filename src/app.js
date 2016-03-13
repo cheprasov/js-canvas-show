@@ -2,11 +2,11 @@
 import CanvasClass from "./canvas/canvas-class.js";
 import EventManagerClass from "./event/event-manager-class.js";
 import ImageClass from "./image/image-class.js";
-import FXClass from "./fx/fx-class.js";
+import FXClass from "./animation/animation-class.js";
 
 let eventManager = new EventManagerClass();
 
-let fx = new FXClass([
+let animation = new FXClass([
     {
         time: 2,
         x: {from: 0, to: 400},
@@ -26,47 +26,65 @@ let fx = new FXClass([
 ]);
 
 let image = new ImageClass('icon64x64.png');
-image.setFX(fx);
+image.setAnimation(animation);
 
-let fx2 = new FXClass([
-
+let animation2 = new FXClass([
     {
-        time: 5,
-        count: Infinity,
-        y: {value: 200},
+        time: 2,
+        y: {value: 0},
         x: {from: 0, to: 400},
-        //scale: {
-        //    width:{from: 1, to: 5},
-        //    height:{from: 1, to: 5},
-        //    x:32, y:32
-        //},
-        rotate: {from: -90, to: 90, x:32, y:32},
-        easing: function(rate) {
-            //return Math.sin(rate * Math.PI);
-            return Math.cos(rate * Math.PI * 2) * 0.5 + 0.5;
+        scale: {
+            width:{value: 0.25},
+            height:{value: 0.25},
+            x:0, y:0
         },
-        onFinish: function() {
-
-        }
+        rotate: {from: 0, to: -360*10, x:48.25, y:48.25},
+        onFinish: 'addToEnd',
+        easing: 'easeInCubic'
     },
-    //{
-    //    time: 4,
-    //    start: 4,
-    //    count: 3,
-    //    x: {value: 200},
-    //    y: {value: 200},
-    //    //y: {from: 0, to: 400},
-    //    scale: {
-    //        width:{from: 10, to: 1},
-    //        height:{from: 10, to: 1},
-    //        x:32, y:32
-    //    },
-    //    easing: 'easeOutElastic'
-    //}
+    {
+        time: 2,
+        x: {value: 400},
+        y: {from: 0, to: 400},
+        scale: {
+            width:{value: 0.25},
+            height:{value: 0.25},
+            x:0, y:0
+        },
+        rotate: {from: 0, to: -360*10, x:48.25, y:48.25},
+        onFinish: 'addToEnd',
+        easing: 'easeOutCubic'
+    },
+    {
+        time: 2,
+        y: {value: 400},
+        x: {from: 400, to: 0},
+        scale: {
+            width:{value: 0.25},
+            height:{value: 0.25},
+            x:0, y:0
+        },
+        rotate: {from: 0, to: -360*10, x:48.25, y:48.25},
+        onFinish: 'addToEnd',
+        easing: 'easeInCubic'
+    },
+    {
+        time: 2,
+        x: {value: 0},
+        y: {from: 400, to: 0},
+        scale: {
+            width:{value: 0.25},
+            height:{value: 0.25},
+            x:0, y:0
+        },
+        rotate: {from: 0, to: -360*10, x:48.25, y:48.25},
+        onFinish: 'addToEnd',
+        easing: 'easeOutCubic'
+    }
 ]);
 
-let image2 = new ImageClass('icon64x64.png');
-image2.setFX(fx2);
+let image2 = new ImageClass('saw386px.png');
+image2.setAnimation(animation2);
 
 
 let canvas = new CanvasClass({

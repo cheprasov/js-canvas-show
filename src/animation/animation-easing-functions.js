@@ -1,6 +1,6 @@
 "use strict";
 
-let FXEasingFunctions = {
+let AnimationEasingFunctions = {
 
         linear: function(p) {
             return p;
@@ -8,6 +8,10 @@ let FXEasingFunctions = {
 
         swing: function(p) {
             return 0.5 - Math.cos(p * Math.PI) / 2;
+        },
+
+        cosLoop: function(p) {
+            return -Math.cos(p * Math.PI * 2) * 0.5 + 0.5;
         }
 
     };
@@ -61,16 +65,16 @@ let FXEasingFunctions = {
             continue;
         }
         let easeIn = baseEasings[name];
-        FXEasingFunctions["easeIn" + name] = easeIn;
-        FXEasingFunctions["easeOut" + name] = function(p) {
+        AnimationEasingFunctions["easeIn" + name] = easeIn;
+        AnimationEasingFunctions["easeOut" + name] = function(p) {
             return 1 - easeIn(1 - p);
         };
-        FXEasingFunctions["easeInOut" + name] = function(p) {
+        AnimationEasingFunctions["easeInOut" + name] = function(p) {
             return p < 0.5 ?
             easeIn( p * 2 ) / 2 :
             1 - easeIn( p * -2 + 2 ) / 2;
         };
     }
 
-export default FXEasingFunctions;
+export default AnimationEasingFunctions;
 

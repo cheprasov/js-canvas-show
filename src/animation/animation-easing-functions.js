@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * @todo:  create AnimationEasingClass
+ * @type {{linear: Function, swing: Function, cosLoop: Function}}
+ */
 let AnimationEasingFunctions = {
 
         linear: function(p) {

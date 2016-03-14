@@ -18,8 +18,6 @@ export default class CanvasClass extends RenderInterface {
         this.setSize(options.width, options.height);
 
         this.items = [];
-        this.rate = 500 / 5;
-        this.index = 0;
     }
 
     setSize(width, height) {
@@ -44,15 +42,18 @@ export default class CanvasClass extends RenderInterface {
         }
     }
 
+    /**
+     * @param {RenderInterface} item
+     */
     addItem (item) {
         this.items.push(item);
     }
 
     /**
      * @param {CanvasRenderingContext2D} context
-     * @param delta
+     * @param time
      */
-    render (context, delta) {
+    render (context, time) {
         //td += delta;
         //this.index += this.rate * delta;
         //console.clear();
@@ -62,7 +63,7 @@ export default class CanvasClass extends RenderInterface {
         context = context || this.context;
         for (let i = 0; i < this.items.length ; i += 1) {
             context.save();
-            this.items[i].render(context, delta);
+            this.items[i].render(context, time);
             context.restore();
         }
     }

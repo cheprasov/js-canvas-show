@@ -7,7 +7,7 @@ export default class AnimationClass extends RenderInterface {
 
     constructor(items) {
         super();
-        this.time = 0;
+        this._time = 0;
         this.setItems(items);
     }
 
@@ -16,8 +16,8 @@ export default class AnimationClass extends RenderInterface {
             throw new Error('Invalid arguments');
         }
         for (let i = 0; i < items.length; i += 1) {
-            items[i].count = items[i].count || 1;
-            items[i]._count = items[i].count;
+            items[i].loops = items[i].loops || 1;
+            items[i]._loops = items[i].loops;
             items[i].start = items[i].start || 0;
             items[i].pause = items[i].pause || 0;
             items[i].time = items[i].time || 1;
@@ -27,13 +27,15 @@ export default class AnimationClass extends RenderInterface {
 
     /**
      * @param {CanvasRenderingContext2D} context
-     * @param delta
+     * @param time
      */
-    render(context, delta) {
+    render(context, time) {
         if (!this.items.length) {
             return false;
         }
-        this.time += delta;
+        if (!this._time) {
+            this._time = time;
+        }
         let item, start, end, rate;
 
         for (;;) {
@@ -42,33 +44,34 @@ export default class AnimationClass extends RenderInterface {
                 return false;
             }
             if (!item.start) {
-                item.start = this.time;
+                item.start = time;
             }
             start = item.start;
             end = start + item.time;
-            if (this.time > end) {
-                start = item.start = this.time + item.pause;
-                if ('count' in item) {
-                    item.count -= 1;
+            if (time > end) {
+                start = item.start = time + item.pause;
+                if ('loops' in item) {
+                    item.loops -= 1;
                 }
             }
-            if (this.time < start) {
+            if (time < start) {
                 return false;
             }
-            if (item.count === 0) {
+            if (item.loops === 0) {
                 let oldItem = this.items.shift();
                 if ('onFinish' in oldItem) {
                     if (typeof oldItem.onFinish === 'function') {
                         oldItem.onFinish(this, oldItem);
                     } else if (oldItem.onFinish === 'addToEnd') {
-                        oldItem.count = oldItem._count;
+                        oldItem.loops = oldItem._loops;
                         oldItem.start = 0;
                         this.items.push(oldItem);
                     }
                 }
                 continue;
             }
-            rate = (this.time - start) / item.time;
+            rate = (time - start) / item.time;
+            //console.log(rate);
             AnimationClass._renderItem(context, item, rate);
             return true;
         }
@@ -146,6 +149,9 @@ export default class AnimationClass extends RenderInterface {
         return property.from + (property.to - property.from) * (property.easing ? AnimationClass._getEasingFunction(property.easing)(ratio) : ratio);
     }
 
+    /**
+     * @todo: move to AnimationEasingClass
+     */
     static _getEasingFunction (easing) {
         if (typeof easing === 'function') {
             return easing;

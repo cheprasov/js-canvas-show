@@ -26,7 +26,7 @@ let AnimationEasingFunctions = {
 
     // Examples: http://jqueryui.com/resources/demos/effect/easing.html
 
-    // easeInBack ,easeInBounce, easeInCirc, easeInCubic, easeInElastic, easeInExpo,
+    // easeInBack, easeInBounce, easeInCirc, easeInCubic, easeInElastic, easeInExpo,
     // easeInOutBack, easeInOutBounce, easeInOutCirc, easeInOutCubic, easeInOutElastic, easeInOutExpo,
     // easeInOutQuad, easeInOutQuart, easeInOutQuint, easeInOutSine, easeInQuad, easeInQuart, easeInQuint,
     // easeInSine, easeOutBack, easeOutBounce, easeOutCirc, easeOutCubic, easeOutElastic, easeOutExpo, easeOutQuad,

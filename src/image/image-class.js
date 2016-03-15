@@ -1,7 +1,7 @@
 "use strict";
 
 import RenderInterface from './../render/render-interface.js';
-import AnimationEasingFunctions from './../animation/animation-easing-functions.js';
+import EasingClass from './../animation/easing-class.js';
 
 export default class ImageClass extends RenderInterface {
 
@@ -158,29 +158,13 @@ export default class ImageClass extends RenderInterface {
             let delta = time - this.sprites._time;
             let index = Math.floor((delta % this.sprites.speed) / this.sprites.rate);
             if (this.sprites.easing) {
-                index = Math.round((this.sprites.count - 1) * ImageClass. _getEasingFunction(this.sprites.easing)((index + 1) / this.sprites.count));
+                index = Math.round((this.sprites.count - 1) * EasingClass.getEasingFunction(this.sprites.easing)((index + 1) / this.sprites.count));
             }
             let frame = this.sprites.frames[index];
             context.drawImage(this.image, frame.x, frame.y, this.width, this.height, 0, 0, this.width, this.height);
         } else {
             context.drawImage(this.image, this.clip.x, this.clip.y, this.clip.w, this.clip.h, 0, 0, this.width, this.height);
         }
-    }
-
-    /**
-     * @todo: move to AnimationEasingClass
-     * @param easing
-     * @returns {*}
-     * @private
-     */
-    static _getEasingFunction (easing) {
-        if (typeof easing === 'function') {
-            return easing;
-        }
-        if (typeof(easing) === 'string' && easing in AnimationEasingFunctions) {
-            return AnimationEasingFunctions[easing];
-        }
-        return AnimationEasingFunctions.linear;
     }
 
 }

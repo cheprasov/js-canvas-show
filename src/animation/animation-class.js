@@ -1,7 +1,7 @@
 "use strict";
 
 import RenderInterface from './../render/render-interface.js';
-import AnimationEasingFunctions from './animation-easing-functions.js';
+import EasingClass from './easing-class.js';
 
 export default class AnimationClass extends RenderInterface {
 
@@ -72,24 +72,24 @@ export default class AnimationClass extends RenderInterface {
             }
             rate = (time - start) / item.time;
             //console.log(rate);
-            AnimationClass._renderItem(context, item, rate);
+            AnimationClass.renderItem(context, item, rate);
             return true;
         }
     }
 
-    static _renderItem(context, item, rate) {
+    static renderItem(context, item, rate) {
         // Сдвиг по х, y
 
         if ('easing' in item) {
-            rate = AnimationClass._getEasingFunction(item.easing)(rate);
+            rate = EasingClass.getEasingFunction(item.easing)(rate);
         }
 
         let x = 0, y = 0;
         if ('x' in item) {
-            x = AnimationClass._calcRenderPropertyValue(item.x, rate);
+            x = EasingClass.calcRenderPropertyValue(item.x, rate);
         }
         if ('y' in item) {
-            y = AnimationClass._calcRenderPropertyValue(item.y, rate);
+            y = EasingClass.calcRenderPropertyValue(item.y, rate);
         }
         if (x || y) {
             context.translate(x, y);
@@ -97,7 +97,7 @@ export default class AnimationClass extends RenderInterface {
 
         // Поворот
         if ('rotate' in item) {
-            let angle = AnimationClass._calcRenderPropertyValue(item.rotate, rate) * Math.PI / 180;
+            let angle = EasingClass.calcRenderPropertyValue(item.rotate, rate) * Math.PI / 180;
             x = 'x' in item.rotate ? item.rotate.x : (item.width / 2 || 0);
             y = 'y' in item.rotate ? item.rotate.y : (item.height / 2 || 0);
             if (x || y) {
@@ -114,10 +114,10 @@ export default class AnimationClass extends RenderInterface {
             let scale_x = 1,
                 scale_y = 1;
             if ('width' in item.scale) {
-                scale_x = AnimationClass._calcRenderPropertyValue(item.scale.width, rate);
+                scale_x = EasingClass.calcRenderPropertyValue(item.scale.width, rate);
             }
             if ('height' in item.scale) {
-                scale_y = AnimationClass._calcRenderPropertyValue(item.scale.height, rate);
+                scale_y = EasingClass.calcRenderPropertyValue(item.scale.height, rate);
             }
             x = 'x' in item.scale ? item.scale.x : (item.width / 2 || 0);
             y = 'y' in item.scale ? item.scale.y : (item.height / 2 || 0);
@@ -131,35 +131,8 @@ export default class AnimationClass extends RenderInterface {
         }
 
         if ('opacity' in item) {
-            context.globalAlpha = Math.max(0, AnimationClass._calcRenderPropertyValue(item.opacity, rate));
+            context.globalAlpha = Math.max(0, EasingClass.calcRenderPropertyValue(item.opacity, rate));
         }
-    }
-
-    /**
-     * Высчитать значения для эффекта
-     * @param {Object} property Свойство
-     * @param {number} ratio Коэффициент шага
-     * @returns {number}
-     * @private
-     */
-    static _calcRenderPropertyValue (property, ratio) {
-        if ('value' in  property) {
-            return property.value;
-        }
-        return property.from + (property.to - property.from) * (property.easing ? AnimationClass._getEasingFunction(property.easing)(ratio) : ratio);
-    }
-
-    /**
-     * @todo: move to AnimationEasingClass
-     */
-    static _getEasingFunction (easing) {
-        if (typeof easing === 'function') {
-            return easing;
-        }
-        if (typeof(easing) === 'string' && easing in AnimationEasingFunctions) {
-            return AnimationEasingFunctions[easing];
-        }
-        return AnimationEasingFunctions.linear;
     }
 
 }

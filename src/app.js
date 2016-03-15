@@ -100,13 +100,6 @@ let image2 = new ImageClass('image_saw.png');
 image2.setAnimation(animation2);
 
 
-let canvas = new CanvasClass({
-    width: 500,
-    height: 500
-});
-canvas.show('canvas');
-
-
 let sprite = new ImageClass({
     image: 'image_sprite.png',
     width: 64,
@@ -141,7 +134,7 @@ let exp = new ImageClass({
         {
             time: 3000,
             loops: Infinity,
-            opacity: {from: 1, to: 0.1},
+            opacity: {from: 1, to: 0},
             easing: 'easeOutQuint'
         }
     ])
@@ -153,17 +146,21 @@ let texture2 = new TextureClass({
     position: {x:0, y:0}
 });
 
+let canvas2 = new CanvasClass({
+    width: 500,
+    height: 500
+});
+canvas2.addItem(texture2);
 
-//canvas.addItem(sprite);
+
+let canvas = new CanvasClass({
+    width: 500,
+    height: 500
+});
+canvas.addItem(canvas2);
 canvas.addItem(texture);
 canvas.addItem(image);
 canvas.addItem(image2);
-canvas.addItem(texture2);
-
-
-
-
-
 
 eventManager.requestAnimationFrame(function(time){
     //console.log(delta);
@@ -171,3 +168,4 @@ eventManager.requestAnimationFrame(function(time){
     canvas.render(null, time);
 });
 
+canvas.show('canvas');

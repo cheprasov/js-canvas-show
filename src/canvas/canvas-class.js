@@ -26,7 +26,7 @@ export default class CanvasClass extends RenderInterface {
     }
 
     clear() {
-        this.setSize();
+        this.context.clearRect(-1, -1, this.canvas.width + 3, this.canvas.height + 3);
     }
 
     /**
@@ -54,17 +54,14 @@ export default class CanvasClass extends RenderInterface {
      * @param time
      */
     render (context, time) {
-        //td += delta;
-        //this.index += this.rate * delta;
-        //console.clear();
-        //console.log(this.index);
-        //console.log(td);
-        //this.clear();
-        context = context || this.context;
+        this.clear();
         for (let i = 0; i < this.items.length ; i += 1) {
-            context.save();
-            this.items[i].render(context, time);
-            context.restore();
+            this.context.save();
+            this.items[i].render(this.context, time);
+            this.context.restore();
+        }
+        if (context) {
+            context.drawImage(this.canvas, 0, 0);
         }
     }
 

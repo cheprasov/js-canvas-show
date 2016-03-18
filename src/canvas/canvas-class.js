@@ -1,32 +1,38 @@
 "use strict";
 
-import RenderInterface from './../render/render-interface.js';
+import RenderClass from './../render/render-class.js';
 
-export default class CanvasClass extends RenderInterface {
+export default class CanvasClass extends RenderClass {
 
     /**
      * @param {Object} options
      */
     constructor(options) {
-        super();
-        options = options || {
-                width: 300,
-                height: 200
-            };
+        super(options);
+        options = options || {};
         this.canvas = document.createElement('canvas');
         this.context = this.canvas.getContext('2d');
         this.setSize(options.width, options.height);
-
         this.items = [];
     }
 
     setSize(width, height) {
-        this.canvas.width = width || this.canvas.width || 0;
-        this.canvas.height = height || this.canvas.height || 0;
+        super.setSize(width, height);
+        if (this.canvas) {
+            this.canvas.width = width || this.canvas.width || 0;
+            this.canvas.height = height || this.canvas.height || 0;
+        }
     }
 
     clear() {
         this.context.clearRect(-1, -1, this.canvas.width + 3, this.canvas.height + 3);
+    }
+
+    /**
+     * @param {RenderClass} item
+     */
+    addItem (item) {
+        this.items.push(item);
     }
 
     /**
@@ -42,18 +48,19 @@ export default class CanvasClass extends RenderInterface {
         }
     }
 
-    /**
-     * @param {RenderInterface} item
-     */
-    addItem (item) {
-        this.items.push(item);
+    render(context, time) {
+        if (context) {
+            super.render(context, time);
+        } else {
+            this._render(context, time);
+        }
     }
 
     /**
      * @param {CanvasRenderingContext2D} context
      * @param time
      */
-    render (context, time) {
+    _render (context, time) {
         this.clear();
         for (let i = 0; i < this.items.length ; i += 1) {
             this.context.save();

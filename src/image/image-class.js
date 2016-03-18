@@ -1,36 +1,20 @@
 "use strict";
 
-import RenderInterface from './../render/render-interface.js';
+import RenderClass from './../render/render-class.js';
 import EasingClass from './../animation/easing-class.js';
 
-export default class ImageClass extends RenderInterface {
+export default class ImageClass extends RenderClass {
 
     constructor(options) {
-        super();
-
-        if (typeof options === 'string') {
-            this.setImage(options);
-            return
-        }
-
-        this.width = options.width || 0;
-        this.height = options.height || 0;
-
-        this.setClip(options.clip);
-
-        if ('position' in options) {
-            this.setPosition(options.position.x, options.position.y);
-        }
+        super(options);
 
         if ('sprites' in options) {
             this.setSprites(options.sprites);
         }
 
-        if ('animation' in options) {
-            this.setAnimation(options.animation);
+        if ('image' in options) {
+            this.setImage(options.image);
         }
-
-        this.setImage(options.image);
     }
 
     setSprites(sprites) {
@@ -64,11 +48,9 @@ export default class ImageClass extends RenderInterface {
      */
     setImage(img) {
         let onloaded = (image) => {
-            if (!this.width) {
-                this.width = image.width;
-            }
-            if (!this.height) {
-                this.height = image.height;
+            if (!this.width || !this.height) {
+                this.setSize(image.width, image.width);
+                this.setClip();
             }
             if (!this.clip) {
                 this.setClip();
@@ -94,62 +76,13 @@ export default class ImageClass extends RenderInterface {
         throw new Error('Invalid argument');
     }
 
-    setPosition (x, y) {
-        this.position = {
-            x: x || 0,
-            y: y || 0
-        };
-    }
-
-    getPosition() {
-        return Object.assign({}, this.position || {});
-    }
-
-    getWidth() {
-        return this.width || 0;
-    }
-
-    getHeight() {
-        return this.height || 0;
-    }
-
-    setClip (clip) {
-        this.clip = {
-            x: clip && clip.x || 0,
-            y: clip && clip.y || 0,
-            w: clip && clip.w || this.width || 0,
-            h: clip && clip.h || this.height || 0
-        };
-    }
-
-    setAnimation (animation) {
-        this.animation = animation;
-    }
-
-    /**
-     * @param {CanvasRenderingContext2D} context
-     * @param {float} time
-     */
-    render (context, time) {
-        if (!this.image) {
-            return;
-        }
-        if (this.animation) {
-            if (this.animation.render(context, time)) {
-                this._render(context, time);
-            }
-        } else {
-            this._render(context, time);
-        }
-    }
-
     /**
      * @param {CanvasRenderingContext2D} context
      * @param {float} time
      */
     _render(context, time) {
-        if (this.position && (this.position.x || this.position.y)) {
-            context.translate(this.position.x, this.position.y);
+        if (!this.image) {
+            return;
         }
         if (this.sprites) {
             if (!this.sprites._time) {

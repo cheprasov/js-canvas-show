@@ -1,15 +1,11 @@
 "use strict";
 
-import RenderInterface from './../render/render-interface.js';
+import RenderClass from './../render/render-class.js';
 
-export default class TextureClass extends RenderInterface {
+export default class TextureClass extends RenderClass {
 
     constructor(options) {
-        super();
-
-        if ('position' in options) {
-            this.setPosition(options.position.x, options.position.y);
-        }
+        super(options);
 
         if ('image' in options) {
             this.setImage(options.image);
@@ -27,13 +23,6 @@ export default class TextureClass extends RenderInterface {
         }
     }
 
-    setPosition () {
-        this.position = {
-            x: arguments[0] || 0,
-            y: arguments[1] || 0
-        };
-    }
-
     /**
      * @param {ImageClass} image
      */
@@ -41,10 +30,7 @@ export default class TextureClass extends RenderInterface {
         this.image = image;
     }
 
-    render(context, time) {
-        if (this.position && (this.position.x || this.position.y)) {
-            context.translate(this.position.x, this.position.y);
-        }
+    _render(context, time) {
         let tx, ty;
         for (let y = 0; y < this.grid.y; y += 1) {
             for (let x = 0; x < this.grid.x; x += 1) {

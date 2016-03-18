@@ -1,12 +1,10 @@
 "use strict";
 
-import RenderInterface from './../render/render-interface.js';
 import EasingClass from './easing-class.js';
 
-export default class AnimationClass extends RenderInterface {
+export default class AnimationClass {
 
     constructor(items) {
-        super();
         this._time = 0;
         this.setItems(items);
     }
@@ -71,7 +69,6 @@ export default class AnimationClass extends RenderInterface {
                 continue;
             }
             rate = (time - start) / item.time;
-            //console.log(rate);
             AnimationClass.renderItem(context, item, rate);
             return true;
         }

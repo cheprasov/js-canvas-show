@@ -7,39 +7,59 @@ export default class TextureClass extends RenderClass {
     constructor(options) {
         super(options);
 
-        if ('image' in options) {
-            this.setImage(options.image);
+        if ('source' in options) {
+            this.setSource(options.source);
         }
 
-        this.setGrid(options.grid);
+        this.map = [];
+
+        if ('grid' in options) {
+            this.setGrid(options.grid);
+        }
+
+        if ('maps' in options) {
+            this.setMaps(options.maps);
+        }
     }
 
     setGrid(grid) {
-        this.grid = {
-            x: grid && grid.x || 1,
-            y: grid && grid.y || 1,
-            w: grid && grid.w || this.image && this.image.getWidth() || 1,
-            h: grid && grid.h || this.image && this.image.getHeight() || 1
+        grid = {
+            x: grid && grid.cols || 1,
+            y: grid && grid.rows || 1,
+            w: grid && grid.width || this.source && this.source.getWidth() || 1,
+            h: grid && grid.height || this.source && this.source.getHeight() || 1
+        };
+        for (let y = 0; y < this.grid.rows; y += 1) {
+            for (let x = 0; x < this.grid.cols; x += 1) {
+                this.maps.push({
+                    x: x * this.grid.width,
+                    y: y * this.grid.height
+                });
+            }
         }
     }
 
     /**
-     * @param {ImageClass} image
+     * @param {Array} maps
      */
-    setImage(image) {
-        this.image = image;
+    setMaps(maps) {
+        this.maps = maps;
+    }
+
+    /**
+     * @param {RenderClass} source
+     */
+    setSource(source) {
+        this.source = source;
     }
 
     _render(context, time) {
-        let tx, ty;
-        for (let y = 0; y < this.grid.y; y += 1) {
-            for (let x = 0; x < this.grid.x; x += 1) {
-                tx = x * this.grid.w;
-                ty = y * this.grid.h;
-                context.translate(tx, ty);
-                this.image.render(context, time);
-                context.translate(-tx, -ty);
-            }
+        let maps;
+        for (let i = 0; i < this.maps.length; i += 1) {
+            maps = this.maps[i];
+            context.translate(maps.x, maps.y);
+            this.source.render(context, time);
+            context.translate(-maps.x, -maps.y);
         }
     }
 

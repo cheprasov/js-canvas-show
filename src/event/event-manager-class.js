@@ -12,11 +12,6 @@ export default class EventManagerClass {
 
     requestAnimationFrame (callback) {
         let requestAnimFrame = (function() {
-            if (0) {
-                return function (callback) {
-                    window.setTimeout(callback, 1000 / 1);
-                };
-            }
             return window.requestAnimationFrame    ||
                 window.webkitRequestAnimationFrame ||
                 window.mozRequestAnimationFrame    ||
@@ -31,9 +26,7 @@ export default class EventManagerClass {
 
         let render = function() {
             let time = Date.now();
-            //let delta = (now - lastTime) / 1000;
             callback(time);
-            //lastTime = now;
             requestAnimFrame(render);
         };
 

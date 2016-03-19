@@ -27,14 +27,14 @@ export default class ImageClass extends RenderClass {
             _time: 0
         };
         this.sprites.rate = this.sprites.speed / this.sprites.count;
-        if (sprites && sprites.grid && sprites.grid.x && sprites.grid.y) {
+        if (sprites && sprites.grid && sprites.grid.cols && sprites.grid.rows) {
             let count = 0;
-            for (let y = 0; y < sprites.grid.y; y += 1) {
-                for (let x = 0; x < sprites.grid.x; x += 1) {
+            for (let rows = 0; rows < sprites.grid.rows; rows += 1) {
+                for (let cols = 0; cols < sprites.grid.cols; cols += 1) {
                     if (count < this.sprites.count) {
                         this.sprites.frames.push({
-                            x: x * this.width,
-                            y: y * this.height
+                            x: cols * this.width + (sprites.grid.x || 0),
+                            y: rows * this.height + (sprites.grid.y || 0)
                         });
                         count += 1;
                     }

@@ -42,7 +42,7 @@ export default class AnimationClass {
                 return false;
             }
             if (!item.start) {
-                item.start = time;
+                item.start = time + item.pause;
             }
             start = item.start;
             end = start + item.time;

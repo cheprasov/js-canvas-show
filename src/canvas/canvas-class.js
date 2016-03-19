@@ -13,7 +13,15 @@ export default class CanvasClass extends RenderClass {
         this.canvas = document.createElement('canvas');
         this.context = this.canvas.getContext('2d');
         this.setSize(options.width, options.height);
-        this.items = [];
+        if (options.items && Array.isArray(options.items)) {
+            this.items = options.items;
+        } else {
+            this.items = [];
+        }
+    }
+
+    getContext() {
+        return this.context;
     }
 
     setSize(width, height) {

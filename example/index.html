@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./../dist/app.js"></script>
+    <title>Example CanvasShow</title>
+</head>
+<body style="background-color: #aaa">
+    <div id="canvas"></div>
+</body>
+<script type="text/javascript">
+    // Create Background
+    var background = new CanvasShow.Image({
+        // link to image
+        image: './images/bg.png'
+    });
+
+    // Create animation for torch on walls
+    var torch = new CanvasShow.Image({
+        // link to image
+        image: './images/bg.png',
+        // necessary to set size for spites
+        width: 10, height: 16,
+        sprites: {
+            // create frames from image
+            frames: [{x: 43, y: 180}, {x: 107, y: 180}],
+            // count of frames
+            count: 2,
+            // Milliseconds for one iteration
+            speed: 500
+        }
+    });
+
+    // Create array of torches
+    var torches = new CanvasShow.Texture({
+        // source for texture
+        source: torch,
+        // Maps
+        maps: [{x: 43, y: 178}, {x: 107, y: 180}, {x: 652, y: 148}]
+    });
+
+    // Create a Minotaur from sprites
+    var minotaur = new CanvasShow.Image({
+        image: './images/minotaur.png',
+        // Necessary to set size of sprites
+        width: 48, height: 48,
+        // Position on stage
+        position: {x: 420, y: 160},
+        // sprites config
+        sprites: {
+            // generate sprites from grid
+            grid: {cols: 10, rows: 4},
+            // set count of frames
+            count: 40,
+            // Milliseconds for one iteration
+            speed: 4000
+        },
+        // Animation
+        animation: [{
+            loops: Infinity,
+            scale: {
+                width: {value: 2},
+                height: {value: 2}
+            }
+        }]
+    });
+
+    // Create a wizard with animation
+    var wizard = new CanvasShow.Image({
+        image: './images/wizard.png',
+        // Necessary to set size of sprite
+        width: 32, height: 32,
+        // Position on stage
+        position: {x: 160, y: 120},
+        // sprites config
+        sprites: {
+            // generate sprites from grid
+            grid: {cols: 10, rows: 4},
+            // set count of frames
+            count: 40,
+            // Milliseconds for one frame iteration
+            speed: 4000
+        },
+        // Animation
+        animation: [
+            {
+                loops: 1,
+                time: 2000,
+                scale: {
+                    width: {value: 2},
+                    height: {value: 2}
+                },
+                onFinish: 'addToEnd'
+            },
+            {
+                loops: 1,
+                time: 1000,
+                x: {from: 0, to: 60},
+                scale: {
+                    width: {value: 2},
+                    height: {value: 2}
+                },
+                onFinish: 'addToEnd'
+            },
+            {
+                loops: 1,
+                time: 3000,
+                x: {value: 60},
+                scale: {
+                    width: {value: 2},
+                    height: {value: 2}
+                },
+                onFinish: 'addToEnd'
+            },
+            {
+                loops: 1,
+                time: 1000,
+                x: {from: 60, to: 0},
+                scale: {
+                    width: {value: 2},
+                    height: {value: 2}
+                },
+                onFinish: 'addToEnd'
+            },
+            {
+                loops: 1,
+                time: 1000,
+                scale: {
+                    width: {value: 2},
+                    height: {value: 2}
+                },
+                onFinish: 'addToEnd'
+            }
+        ]
+    });
+
+    // Create animation for slime
+    var slime = new CanvasShow.Image({
+        // link to image
+        image: './images/slime.png',
+        // necessary to set size for spites
+        width: 32, height: 32,
+        position: {x: 260, y: 120},
+        sprites: {
+            // create frames from image
+            grid: {
+                rows:4, cols: 10,
+                x: 0, y: 160
+            },
+            // count of frames
+            count: 40,
+            // Milliseconds for one iteration
+            speed: 4000
+        },
+        // Animation
+        animation: [{
+            loops: Infinity,
+            scale: {
+                width: {value: 2},
+                height: {value: 2}
+            }
+        }]
+    });
+
+    // Create saw
+    var saw = new CanvasShow.Image({
+        // link to image
+        image: './images/saw.png',
+        // Animation
+        animation: [{
+            time: 500,
+            loops: Infinity,
+            rotate: {from: 0, to: -360, x: 25, y: 25},
+            scale: {
+                width: {value: 0.5},
+                height: {value: 0.5}
+            }
+        }]
+    });
+
+    // Create canvas
+    var halfSaw = new CanvasShow.Canvas({
+        width: 50, height: 25,
+        position: {x: 100, y: 235},
+        items: [saw],
+        animation: [{
+            loops: Infinity,
+            scale: {
+                height: {value: 0.8}
+            }
+        }]
+    });
+
+    // Create a Minotaur from sprites
+    var clericWalk = new CanvasShow.Image({
+        image: './images/cleric.png',
+        // Necessary to set size of sprites
+        width: 32, height: 32,
+        // Position on stage
+        position: {x: 385, y: 195},
+        // sprites config
+        sprites: {
+            // generate sprites from grid
+            grid: {cols: 10, rows: 1, x: 0, y: 64},
+            // set count of frames
+            count: 10,
+            // Milliseconds for one iteration
+            speed: 1000
+        },
+        // Animation
+        animation: [{
+            time: 5000,
+            pause: 2500,
+            loops: Infinity,
+            x: {from: -580, to: 0},
+            y: {from: 30, to: 0},
+            scale: {
+                width: {value: 2},
+                height: {value: 2}
+            }
+        }]
+    });
+
+    // Create a Minotaur from sprites
+    var clericDead = new CanvasShow.Image({
+        image: './images/cleric.png',
+        // Necessary to set size of sprites
+        width: 32, height: 32,
+        // Position on stage
+        position: {x: 385, y: 195},
+        // sprites config
+        sprites: {
+            // generate sprites from grid
+            grid: {cols: 10, rows: 1, x: 0, y: 128},
+            // set count of frames
+            count: 10,
+            // Milliseconds for one iteration
+            speed: 1000
+        },
+        // Animation
+        animation: [{
+            loops: Infinity,
+            pause: 7500,
+            time: 1000,
+            x: {from: 0, to: 5},
+            scale: {
+                width: {value: 2},
+                height: {value: 2}
+            }
+        }]
+    });
+
+    // Create canvas
+    var canvas = new CanvasShow.Canvas({
+        width: 768, height: 512,
+        items: [
+            background,
+            torches,
+            minotaur,
+            wizard,
+            slime,
+            halfSaw,
+            clericWalk,
+            clericDead
+        ]
+    });
+
+    // Canvas Show
+    canvas.show('canvas');
+    // I like pixel graphics
+    canvas.getContext().imageSmoothingEnabled = false;
+
+    (new CanvasShow.EventManager).requestAnimationFrame(function(time) {
+        canvas.render(null, time);
+    });
+
+
+</script>
+</html>
